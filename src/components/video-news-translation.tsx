@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card"
 import {Video} from 'lucide-react'
 
-const videoNewsTranslation = () => {
+export const videoNewsTranslation = () => {
   return (
     <div>
       <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleOptionSelect('video')}>
@@ -17,4 +17,4 @@ const videoNewsTranslation = () => {
               </Card></div>
   )
 }
-export  default videoNewsTranslation;
+
