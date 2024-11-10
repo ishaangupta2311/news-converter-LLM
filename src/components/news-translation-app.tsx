@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChevronDown, Globe, Newspaper, Video } from 'lucide-react'
+import {videoNewsTranslation} from './video-news-translation'
 
 export function NewsTranslationAppComponent() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
@@ -73,17 +74,7 @@ export function NewsTranslationAppComponent() {
                   <CardDescription>Convert written news articles into multiple languages</CardDescription>
                 </CardContent>
               </Card>
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleOptionSelect('video')}>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-center">
-                    <Video className="h-8 w-8 mr-2 text-blue-600" />
-                    Translate News Video
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>Generate multilingual subtitles for news videos</CardDescription>
-                </CardContent>
-              </Card>
+            <videoNewsTranslation/>          
             </div>
           </div>
         ) : (
