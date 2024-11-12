@@ -82,9 +82,9 @@ export function NewsTranslationAppComponent() {
                 <label htmlFor="languages" className="block text-sm font-medium text-gray-700 mb-1">
                   Select Target Languages
                 </label>
-                <div className="border rounded-md p-3 space-y-2">
-                  {['Spanish', 'French', 'German', 'Italian', 'Chinese', 'Japanese'].map((lang) => (
-                    <div key={lang} className="flex items-center">
+                <div className="border rounded-md p-3 max-h-48 overflow-y-auto">
+                  {['Spanish', 'French', 'German', 'Italian', 'Chinese', 'Japanese', 'Korean', 'Russian', 'Portuguese', 'Arabic', 'Hindi', 'Bengali'].map((lang) => (
+                    <div key={lang} className="flex items-center py-1 hover:bg-gray-50">
                       <input
                         type="checkbox"
                         id={`lang-${lang}`}
