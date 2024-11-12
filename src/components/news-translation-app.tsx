@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 
 import {VideoNewsTranslation} from './video-news-translation'
 import { ArticleNewsTranslation } from './news-article-translation'
@@ -83,26 +82,22 @@ export function NewsTranslationAppComponent() {
                 <label htmlFor="languages" className="block text-sm font-medium text-gray-700 mb-1">
                   Select Target Languages
                 </label>
-                <Select>
-                  <SelectTrigger id="languages" className="w-full">
-                    <SelectValue placeholder="Choose languages" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {['Spanish', 'French', 'German', 'Italian', 'Chinese', 'Japanese'].map((lang) => (
-                      <SelectItem key={lang} value={lang}>
-                        <div className="flex items-center">
-                          <input
-                            type="checkbox"
-                            checked={selectedLanguages.includes(lang)}
-                            onChange={() => handleLanguageSelect(lang)}
-                            className="mr-2"
-                          />
-                          {lang}
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <div className="border rounded-md p-3 space-y-2">
+                  {['Spanish', 'French', 'German', 'Italian', 'Chinese', 'Japanese'].map((lang) => (
+                    <div key={lang} className="flex items-center">
+                      <input
+                        type="checkbox"
+                        id={`lang-${lang}`}
+                        checked={selectedLanguages.includes(lang)}
+                        onChange={() => handleLanguageSelect(lang)}
+                        className="mr-2"
+                      />
+                      <label htmlFor={`lang-${lang}`} className="text-sm text-gray-700">
+                        {lang}
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </div>
               <Button type="submit" className="w-full">
                 Start Translation
