@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { ChevronDown, Globe, Newspaper, Video } from 'lucide-react'
-import {videoNewsTranslation} from './video-news-translation'
+
+import {VideoNewsTranslation} from './video-news-translation'
+import { ArticleNewsTranslation } from './news-article-translation'
+import Navbar from './Navbar'
 
 export function NewsTranslationAppComponent() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
@@ -45,36 +46,14 @@ export function NewsTranslationAppComponent() {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <Globe className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-semibold text-gray-900">NewsTranslator</span>
-          </div>
-          <nav>
-            <Button variant="ghost">About</Button>
-            <Button variant="ghost">Contact</Button>
-          </nav>
-        </div>
-      </header>
-
+      <Navbar/>
       <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {!selectedOption ? (
           <div className="text-center">
             <h1 className="text-3xl font-bold text-gray-900 mb-8">Translate News Content</h1>
             <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-              <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => handleOptionSelect('article')}>
-                <CardHeader>
-                  <CardTitle className="flex items-center justify-center">
-                    <Newspaper className="h-8 w-8 mr-2 text-blue-600" />
-                    Translate News Article
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>Convert written news articles into multiple languages</CardDescription>
-                </CardContent>
-              </Card>
-            <videoNewsTranslation/>          
+              <ArticleNewsTranslation handleOptionFunc={handleOptionSelect}/>
+              <VideoNewsTranslation handleOptionFunc={handleOptionSelect}/>          
             </div>
           </div>
         ) : (
