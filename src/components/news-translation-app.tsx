@@ -15,31 +15,42 @@ export function NewsTranslationAppComponent() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [url, setUrl] = useState('')
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
-  const [selectedLanguagesList, setSelectedLanguagesList] = useState<string[]>([])
   const [translationProgress, setTranslationProgress] = useState(0)
+  const [translationResults, setTranslationResults] = useState<Record<string, string> | null>(null)
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option)
-    // Reset other states when changing option
     setUrl('')
     setSelectedLanguages([])
     setTranslationProgress(0)
+    setTranslationResults(null)
   }
 
-  const handleUrlSubmit = (e: React.FormEvent) => {
+  const handleUrlSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Log the selected languages list to the console
-    console.log("Selected Languages List:", selectedLanguagesList)
-    
-    // Simulate translation process
-    let progress = 0
-    const interval = setInterval(() => {
-      progress += 10
-      setTranslationProgress(progress)
-      if (progress >= 100) {
-        clearInterval(interval)
+    console.log("Selected Languages List:", selectedLanguages)
+
+    try {
+      const response = await fetch('/ai/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ url, languages: selectedLanguages }),
+      })
+
+      const data = await response.json()
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch translation')
       }
-    }, 500)
+
+      setTranslationResults(data.model_response)
+      setTranslationProgress(100)
+    } catch (error) {
+      console.error('Error during translation:', error)
+      setTranslationProgress(0)
+    }
   }
 
   const handleLanguageSelect = (lang: string) => {
@@ -48,11 +59,11 @@ export function NewsTranslationAppComponent() {
         ? prev.filter(l => l !== lang) 
         : [...prev, lang];
       
-      // Update the selected languages list
-      setSelectedLanguagesList(newSelectedLanguages);
       return newSelectedLanguages;
     });
   }
+
+  // console.log('Translation Results:', translationResults);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -120,7 +131,7 @@ export function NewsTranslationAppComponent() {
                 <Progress value={translationProgress} className="w-full" />
               </div>
             )}
-            {translationProgress === 100 && (
+            {translationProgress === 100 && translationResults && (
               <div className="mt-8">
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Translation Results</h3>
                 <Tabs defaultValue="original" className="w-full">
@@ -135,11 +146,18 @@ export function NewsTranslationAppComponent() {
                   </TabsContent>
                   {selectedLanguages.map((lang) => (
                     <TabsContent key={lang} value={lang} className="p-4 bg-white rounded-md shadow">
-                      <p className="text-gray-600">Translated content for {lang} will be displayed here.</p>
+                      <p className="text-gray-600">
+                        {translationResults && translationResults[lang.toLowerCase()]
+                          ? translationResults[lang.toLowerCase()]
+                          : `Translation not available for ${lang}`
+                        }
+                      </p>
                     </TabsContent>
                   ))}
                 </Tabs>
+                
               </div>
+              
             )}
           </div>
         )}
