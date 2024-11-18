@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Progress } from "@/components/ui/progress"
+import { Spinner } from "@/components/spinner"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import {VideoNewsTranslation} from './video-news-translation'
@@ -29,6 +29,8 @@ export function NewsTranslationAppComponent() {
   const handleUrlSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     console.log("Selected Languages List:", selectedLanguages)
+
+    setTranslationProgress(0)
 
     try {
       const response = await fetch('/ai/', {
@@ -125,10 +127,9 @@ export function NewsTranslationAppComponent() {
                 Start Translation
               </Button>
             </form>
-            {translationProgress > 0 && (
-              <div className="mt-8">
-                <h3 className="text-lg font-medium text-gray-900 mb-2">Translation Progress</h3>
-                <Progress value={translationProgress} className="w-full" />
+            {translationProgress === 0 && (
+              <div className="mt-8 flex justify-center">
+                <Spinner />
               </div>
             )}
             {translationProgress === 100 && translationResults && (
@@ -155,9 +156,7 @@ export function NewsTranslationAppComponent() {
                     </TabsContent>
                   ))}
                 </Tabs>
-                
               </div>
-              
             )}
           </div>
         )}
