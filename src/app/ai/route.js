@@ -36,7 +36,7 @@ export async function POST(req) {
     // Parse the response text as JSON before sending
     const parsedResponse = responseText2;//= JSON.parse(responseText2);
     
-    return NextResponse.json({ model_response: parsedResponse });
+    return NextResponse.json({ model_response: parsedResponse, originalContent: articleContent });
   } catch (error) {
     console.error(error);
     return NextResponse.json({ error: 'Translation failed' }, { status: 500 });
