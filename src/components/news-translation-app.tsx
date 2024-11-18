@@ -15,14 +15,13 @@ export function NewsTranslationAppComponent() {
   const [selectedOption, setSelectedOption] = useState<string | null>(null)
   const [url, setUrl] = useState('')
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
-  const [translationProgress, setTranslationProgress] = useState(0)
+  const [isLoading, setIsLoading] = useState(false)
   const [translationResults, setTranslationResults] = useState<Record<string, string> | null>(null)
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option)
     setUrl('')
     setSelectedLanguages([])
-    setTranslationProgress(0)
     setTranslationResults(null)
   }
 
@@ -30,7 +29,7 @@ export function NewsTranslationAppComponent() {
     e.preventDefault()
     console.log("Selected Languages List:", selectedLanguages)
 
-    setTranslationProgress(0)
+    setIsLoading(true)
 
     try {
       const response = await fetch('/ai/', {
@@ -48,10 +47,10 @@ export function NewsTranslationAppComponent() {
       }
 
       setTranslationResults(data.model_response)
-      setTranslationProgress(100)
     } catch (error) {
       console.error('Error during translation:', error)
-      setTranslationProgress(0)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -64,8 +63,6 @@ export function NewsTranslationAppComponent() {
       return newSelectedLanguages;
     });
   }
-
-  // console.log('Translation Results:', translationResults);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -100,6 +97,7 @@ export function NewsTranslationAppComponent() {
                   onChange={(e) => setUrl(e.target.value)}
                   required
                   className="w-full"
+                  disabled={isLoading}
                 />
               </div>
               <div>
@@ -115,6 +113,7 @@ export function NewsTranslationAppComponent() {
                         checked={selectedLanguages.includes(lang)}
                         onChange={() => handleLanguageSelect(lang)}
                         className="mr-2"
+                        disabled={isLoading}
                       />
                       <label htmlFor={`lang-${lang}`} className="text-sm text-gray-700">
                         {lang}
@@ -123,16 +122,16 @@ export function NewsTranslationAppComponent() {
                   ))}
                 </div>
               </div>
-              <Button type="submit" className="w-full">
-                Start Translation
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? <Spinner /> : 'Start Translation'}
               </Button>
             </form>
-            {translationProgress === 0 && (
+            {isLoading && (
               <div className="mt-8 flex justify-center">
                 <Spinner />
               </div>
             )}
-            {translationProgress === 100 && translationResults && (
+            {translationResults && (
               <div className="mt-8">
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Translation Results</h3>
                 <Tabs defaultValue="original" className="w-full">
@@ -161,7 +160,6 @@ export function NewsTranslationAppComponent() {
           </div>
         )}
       </main>
-
       <Footer/>
     </div>
   )
