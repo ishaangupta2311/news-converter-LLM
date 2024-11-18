@@ -17,6 +17,7 @@ export function NewsTranslationAppComponent() {
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([])
   const [isLoading, setIsLoading] = useState(false)
   const [translationResults, setTranslationResults] = useState<Record<string, string> | null>(null)
+  const [articleContent, setArticleContent] = useState("Original content will be displayed here");
 
   const handleOptionSelect = (option: string) => {
     setSelectedOption(option)
@@ -47,6 +48,7 @@ export function NewsTranslationAppComponent() {
       }
 
       setTranslationResults(data.model_response)
+      setArticleContent(data.originalContent)
     } catch (error) {
       console.error('Error during translation:', error)
     } finally {
@@ -142,7 +144,12 @@ export function NewsTranslationAppComponent() {
                     ))}
                   </TabsList>
                   <TabsContent value="original" className="p-4 bg-white rounded-md shadow">
-                    <p className="text-gray-600">Original content will be displayed here.</p>
+                    <p className="text-gray-600">
+                      `${articleContent}`
+                      {/* {articleContent ? : articleContent
+                      "Original content will be displayed here."
+                      } */}
+                    </p>
                   </TabsContent>
                   {selectedLanguages.map((lang) => (
                     <TabsContent key={lang} value={lang} className="p-4 bg-white rounded-md shadow">
